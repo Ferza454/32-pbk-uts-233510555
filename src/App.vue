@@ -12,22 +12,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const newTask = ref('')
 const tasks = ref([])
 
+function loadTasks() {
+  const saved = localStorage.getItem('tasks')
+  if (saved) {
+    tasks.value = JSON.parse(saved)
+  }
+}
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks.value))
+}
+
 function addTask() {
   if (newTask.value.trim() !== '') {
-    tasks.value.push(newTask.value)
+    tasks.value.push(newTask.value.trim())
     newTask.value = ''
+    saveTasks()
   }
 }
 
 function removeTask(index) {
   tasks.value.splice(index, 1)
+  saveTasks()
 }
+
+onMounted(loadTasks)
 </script>
+
 
 <style scoped>
 .container {
