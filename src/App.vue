@@ -1,49 +1,47 @@
-<script setup>
-import { ref } from 'vue';
-
-// Data reactive
-const tugasBaru = ref('');
-const daftarTugas = ref([]);
-
-// Fungsi tambah tugas
-const tambahTugas = () => {
-  if (tugasBaru.value.trim() === '') return;
-  
-  daftarTugas.value.push({
-    teks: tugasBaru.value,
-    selesai: false
-  });
-  
-  tugasBaru.value = '';
-};
-</script>
-
 <template>
-  <div class="app">
-    <h1>Daftar Tugas</h1>
-    
-    <div class="input-area">
-      <input
-        type="text"
-        v-model="tugasBaru"
-        placeholder="Tulis tugas..."
-        @keyup.enter="tambahTugas"
-      />
-      <button @click="tambahTugas">Tambah</button>
-    </div>
-    
-    <div class="daftar-tugas">
-      <div v-for="(tugas, index) in daftarTugas" :key="index">
-        {{ tugas.teks }}
-      </div>
-    </div>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <input v-model="newTask" @keyup.enter="addTask" placeholder="Tambahkan tugas baru..." />
+    <ul>
+      <li v-for="(task, index) in tasks" :key="index">
+        {{ task }}
+        <button @click="removeTask(index)">Hapus</button>
+      </li>
+    </ul>
   </div>
 </template>
 
-<style>
-.app {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+<script setup>
+import { ref } from 'vue'
+
+const newTask = ref('')
+const tasks = ref([])
+
+function addTask() {
+  if (newTask.value.trim() !== '') {
+    tasks.value.push(newTask.value)
+    newTask.value = ''
+  }
+}
+
+function removeTask(index) {
+  tasks.value.splice(index, 1)
+}
+</script>
+
+<style scoped>
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  text-align: center;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+button {
+  margin-left: 10px;
+  color: red;
 }
 </style>
