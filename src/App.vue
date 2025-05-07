@@ -3,11 +3,15 @@
     <h1>To-Do List</h1>
     <input v-model="newTask" @keyup.enter="addTask" placeholder="Tambahkan tugas baru..." />
     <ul>
-      <li v-for="(task, index) in tasks" :key="index">
-        {{ task }}
-        <button @click="removeTask(index)">Hapus</button>
-      </li>
-    </ul>
+  <li v-for="(task, index) in tasks" :key="index">
+    <label>
+      <input type="checkbox" v-model="task.done" @change="saveTasks" />
+      <span :class="{ done: task.done }">{{ task.text }}</span>
+    </label>
+    <button @click="removeTask(index)">Hapus</button>
+  </li>
+</ul>
+
   </div>
 </template>
 
@@ -30,7 +34,7 @@ function saveTasks() {
 
 function addTask() {
   if (newTask.value.trim() !== '') {
-    tasks.value.push(newTask.value.trim())
+    tasks.value.push({ text: newTask.value.trim(), done: false })
     newTask.value = ''
     saveTasks()
   }
@@ -60,4 +64,10 @@ button {
   margin-left: 10px;
   color: red;
 }
+
+.done {
+  text-decoration: line-through;
+  color: gray;
+}
+
 </style>
