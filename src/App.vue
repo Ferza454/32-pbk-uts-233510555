@@ -3,20 +3,20 @@
     <h1>To-Do List</h1>
     <input v-model="newTask" @keyup.enter="addTask" placeholder="Tambahkan tugas baru..." />
     <ul>
-  <li v-for="(task, index) in tasks" :key="index">
-    <label>
-      <input type="checkbox" v-model="task.done" @change="saveTasks" />
-      <span :class="{ done: task.done }">{{ task.text }}</span>
-    </label>
-    <button @click="removeTask(index)">Hapus</button>
-  </li>
-</ul>
-
+      <TodoItem
+        v-for="(task, index) in tasks"
+        :key="index"
+        :task="task"
+        @remove="removeTask(index)"
+        @update="saveTasks"
+      />
+    </ul>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
+import TodoItem from './components/TodoItem.vue'
 
 const newTask = ref('')
 const tasks = ref([])
@@ -47,27 +47,3 @@ function removeTask(index) {
 
 onMounted(loadTasks)
 </script>
-
-
-<style scoped>
-.container {
-  max-width: 500px;
-  margin: 50px auto;
-  text-align: center;
-}
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-button {
-  margin-left: 10px;
-  color: red;
-}
-
-.done {
-  text-decoration: line-through;
-  color: gray;
-}
-
-</style>
